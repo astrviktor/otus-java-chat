@@ -37,7 +37,7 @@ public class ClientHandler {
                             break;
                         }
                         if (message.startsWith("/w ")) {
-                            server.personalMessage(username, message);
+                            server.personalMessage(this, message);
                         }
                         continue;
                     }

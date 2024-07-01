@@ -42,7 +42,7 @@ public class Server {
         }
     }
 
-    public synchronized void personalMessage(String from, String message) {
+    public synchronized void personalMessage(ClientHandler from, String message) {
         String[] words = message.split(" ", 3);
         if (words.length != 3) {
             return;
@@ -53,8 +53,12 @@ public class Server {
 
         for (ClientHandler c : clients) {
             if (c.getUsername().equals(username)) {
-                c.sendMessage("Личное сообщение от " + from + ": " + message);
+                c.sendMessage("Личное сообщение от " + from.getUsername() + ": " + message);
+                from.sendMessage("Личное сообщение для " + c.getUsername() + ": " + message);
+                return;
             }
         }
+
+        from.sendMessage("Личное сообщение не отправлено, пользователь не в сети");
     }
 }
