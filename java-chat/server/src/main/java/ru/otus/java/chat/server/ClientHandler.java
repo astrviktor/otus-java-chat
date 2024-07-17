@@ -11,13 +11,15 @@ public class ClientHandler {
     private DataInputStream in;
     private DataOutputStream out;
     private String username;
+    private Role role;
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUser(String username, Role role) {
         this.username = username;
+        this.role = role;
     }
 
     public ClientHandler(Server server, Socket socket) throws IOException {
@@ -64,6 +66,19 @@ public class ClientHandler {
                         if (message.equals("/exit")) {
                             sendMessage("/exitok");
                             break;
+                        }
+                        if (message.startsWith("/kick")) {
+                            if (role != Role.ADMIN) {
+                                sendMessage("Нет роли ADMIN");
+                                continue;
+                            }
+                            String[] elements = message.split(" ");
+                            if (elements.length != 2) {
+                                sendMessage("Неверный формат команды /kick");
+                                continue;
+                            }
+                            server.kick(this, elements[1]);
+                            continue;
                         }
                         continue;
                     }

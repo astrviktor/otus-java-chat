@@ -57,4 +57,16 @@ public class Server {
         }
         return false;
     }
+
+    public synchronized void kick(ClientHandler admin, String username) {
+        for (ClientHandler c : clients) {
+            if (c.getUsername().equals(username)) {
+                c.sendMessage("Отключен от чата пользователем " + admin.getUsername());
+                admin.sendMessage("Пользователь " + c.getUsername() + " отключен от чата");
+                c.disconnect();
+                return;
+            }
+        }
+        admin.sendMessage("Пользователь " + username + " не в сети");
+    }
 }
